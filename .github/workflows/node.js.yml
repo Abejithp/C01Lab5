@@ -36,4 +36,4 @@ jobs:
 
         
         - run: npm i
-        - run: npm test & npm run start
+        - run: npm run start & npm run test
