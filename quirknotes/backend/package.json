@@ -5,6 +5,7 @@
   "main": "server.js",
   "scripts": {
     "test": "jest",
+    "build": "mongod --dbpath=./data/db",
     "start": "node server.js",
     "dev": "nodemon server.js"
   },
