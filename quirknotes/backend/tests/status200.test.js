@@ -1,8 +1,16 @@
 const SERVER_URL = "http://localhost:4000";
 
-test("/postNote - Post a note", async () => {
+beforeEach(() => {
+    //delete all notes
+    fetch(`${SERVER_URL}/deleteAllNotes`, {
+        method: "DELETE",
+        headers: {
+            "Content-Type": "application/json",
+        },
+    });
+});
 
-    
+test("/postNote - Post a note", async () => {
 
     const title = "NoteTitleTest";
     const content = "NoteTitleContent";
@@ -22,14 +30,6 @@ test("/postNote - Post a note", async () => {
 
     expect(postNoteRes.status).toBe(200);
     expect(postNoteBody.response).toBe("Note added succesfully.");
-
-    // delete note
-    await fetch(`${SERVER_URL}/deleteNote/${postNoteBody.insertedId}`, {
-        method: "DELETE",
-        headers: {
-            "Content-Type": "application/json",
-        },
-    });
 });
 
 test("/getAllNotes - Return list of zero notes for getAllNotes", async () => {
@@ -90,21 +90,6 @@ test("/getAllNotes - Return list of two notes for getAllNotes", async () => {
 
     expect(getAllNotesRes.status).toBe(200);
     expect(getAllNotesBody.response.length).toBe(2);
-
-    //delete notes
-    await fetch(`${SERVER_URL}/deleteNote/${postNoteBody.insertedId}`, {
-        method: "DELETE",
-        headers: {
-            "Content-Type": "application/json",
-        },
-    });
-
-    await fetch(`${SERVER_URL}/deleteNote/${postNoteBody2.insertedId}`, {
-        method: "DELETE",
-        headers: {
-            "Content-Type": "application/json",
-        },
-    });
 
 });
 
@@ -175,16 +160,7 @@ test("/patchNote - Patch with content and title", async () => {
     });
 
     const patchNoteBody = await patchNoteRes.json();
-
     expect(patchNoteRes.status).toBe(200);
-
-    //delete note
-    await fetch(`${SERVER_URL}/deleteNote/${postNoteBody.insertedId}`, {
-        method: "DELETE",
-        headers: {
-            "Content-Type": "application/json",
-        },
-    });
 
 });
 
@@ -192,7 +168,7 @@ test("/patchNote - Patch with just title", async () => {
     //post note
     const title = "NoteTitleTest";
     const content = "NoteTitleContent";
-   
+
     const postNoteRes = await fetch(`${SERVER_URL}/postNote`, {
         method: "POST",
         headers: {
@@ -223,14 +199,6 @@ test("/patchNote - Patch with just title", async () => {
 
     expect(patchNoteRes.status).toBe(200);
 
-    //delete note
-
-    await fetch(`${SERVER_URL}/deleteNote/${postNoteBody.insertedId}`, {
-        method: "DELETE",
-        headers: {
-            "Content-Type": "application/json",
-        },
-    });
 });
 
 test("/patchNote - Patch with just content", async () => {
@@ -267,15 +235,6 @@ test("/patchNote - Patch with just content", async () => {
     const patchNoteBody = await patchNoteRes.json();
 
     expect(patchNoteRes.status).toBe(200);
-
-    // delete note
-    await fetch(`${SERVER_URL}/deleteNote/${postNoteBody.insertedId}`, {
-        method: "DELETE",
-        headers: {
-            "Content-Type": "application/json",
-        },
-    });
-
 
 });
 
@@ -399,14 +358,4 @@ test("/updateNoteColor - Update color of a note to red (#FF0000)", async () => {
     const updateNoteColorBody = await updateNoteColorRes.json();
 
     expect(updateNoteColorRes.status).toBe(200);
-
-    // Delete the note
-
-    await fetch(`${SERVER_URL}/deleteNote/${postNoteBody.insertedId}`, {
-        method: "DELETE",
-        headers: {
-            "Content-Type": "application/json",
-        },
-    });
-
 });
